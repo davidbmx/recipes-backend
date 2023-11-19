@@ -3,6 +3,9 @@ from django.db import models
 from utils.main_model import MainModel
 from users.models import User
 
+def upload_image(instance, filename):
+    return f'recipes/{instance.pk}/{filename}'
+
 class Tag(MainModel):
     name = models.CharField(max_length=150)
     def __str___(self):
@@ -26,7 +29,7 @@ class Recipe(MainModel):
     prep_time = models.CharField(max_length=50)
     cook_time = models.CharField(max_length=50)
     bill_spent = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True, null=True)
     likes = models.IntegerField(default=0)
     bookmarks = models.IntegerField(default=0)
     visibility = models.CharField(max_length=7, choices=VISIBILITY_CHOICE, default=VISIBILITY_CHOICE[0])
@@ -51,3 +54,12 @@ class Ingredient(MainModel):
     
     def __str__(self):
         return self.description
+
+class Images(MainModel):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to=upload_image)
+    is_default = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.image.name
+    

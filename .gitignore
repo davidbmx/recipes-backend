@@ -282,3 +282,5 @@ db.json
 latest.dump
 
 db.sqlite3
+!db.sqlite3
+db.sqlite3
