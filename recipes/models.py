@@ -29,7 +29,7 @@ class Recipe(MainModel):
     prep_time = models.CharField(max_length=50)
     cook_time = models.CharField(max_length=50)
     bill_spent = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
-    tags = models.ManyToManyField(Tag, blank=True, null=True)
+    tags = models.ManyToManyField(Tag, blank=True)
     likes = models.IntegerField(default=0)
     bookmarks = models.IntegerField(default=0)
     visibility = models.CharField(max_length=7, choices=VISIBILITY_CHOICE, default=VISIBILITY_CHOICE[0])
