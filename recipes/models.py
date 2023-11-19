@@ -14,6 +14,11 @@ class Recipe(MainModel):
         ('MEDIUM', 'MEDIUM'),
         ('HARD', 'HARD'),
     )
+    VISIBILITY_CHOICE = (
+        ('PUBLIC', 'PUBLIC'),
+        ('PRIVATE', 'PRIVATE'),
+        ('DRAFT', 'DRAFT'),
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipes")
     title = models.CharField(max_length=150, blank=False, null=False)
     description = models.TextField(blank=False, null=False)
@@ -24,22 +29,17 @@ class Recipe(MainModel):
     tags = models.ManyToManyField(Tag)
     likes = models.IntegerField(default=0)
     bookmarks = models.IntegerField(default=0)
+    visibility = models.CharField(max_length=7, choices=VISIBILITY_CHOICE, default=VISIBILITY_CHOICE[0])
 
     def __str__(self):
         return self.title
     
 
 class Step(MainModel):
-    VISIBILITY_CHOICE = (
-        ('PUBLIC', 'PUBLIC'),
-        ('PRIVATE', 'PRIVATE'),
-        ('DRAFT', 'DRAFT'),
-    )
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='instructions')
     step = models.IntegerField()
     description = models.TextField()
     image = models.URLField(blank=True, null=True)
-    visibility = models.CharField(max_length=7, choices=VISIBILITY_CHOICE, default=VISIBILITY_CHOICE[0])
 
     def __str__(self):
         return self.recipe
