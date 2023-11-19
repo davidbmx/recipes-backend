@@ -15,14 +15,12 @@ class IngredientSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     steps = InstructionSerializer(many=True)
     ingredients = IngredientSerializer(many=True)
-    
     class Meta:
         model = Recipe
         fields = '__all__'
-        read_only_fields = ['user', 'likes', 'bookmarks']
+        read_only_fields = ['user', 'likes', 'bookmarks', 'steps', 'ingredients',]
 
 class RecipesRetrieveSerializer(serializers.ModelSerializer):
-    instructions = 
     class Meta:
         model = Recipe
         fields = [
