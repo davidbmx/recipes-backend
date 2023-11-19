@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from recipes.models import Recipe, Ingredient, Step
 
-class InstructionSerializer(serializers.ModelSerializer):
+class StepSerializer(serializers.ModelSerializer):
     class Meta:
         model = Step
         fields = '__all__'
@@ -13,7 +13,7 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class RecipeSerializer(serializers.ModelSerializer):
-    steps = InstructionSerializer(many=True)
+    steps = StepSerializer(many=True)
     ingredients = IngredientSerializer(many=True)
     class Meta:
         model = Recipe
