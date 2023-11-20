@@ -4,7 +4,7 @@ from utils.main_model import MainModel
 from users.models import User
 
 def upload_image(instance, filename):
-    return f'recipes/{instance.pk}/{filename}'
+    return f'recipes/{instance.user.username}/{filename}'
 
 class Tag(MainModel):
     name = models.CharField(max_length=150)

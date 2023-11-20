@@ -3,6 +3,9 @@ from django.contrib.auth.models import AbstractUser
 
 from utils.main_model import MainModel
 
+def upload_image(instance, filename):
+    return f'users/{instance.user.username}/{filename}'
+
 class User(MainModel, AbstractUser):
     email = models.EmailField(
         'email address',
@@ -18,7 +21,7 @@ class User(MainModel, AbstractUser):
     uid = models.TextField(db_index=True, blank=True, null=True)
 
     following = models.IntegerField(default=0)
-    avatar = models.TextField(blank=True, null=True)
+    avatar = models.ImageField(upload_to=upload_image, blank=True, null=True)
 
     def __str__(self):
         return self.username
