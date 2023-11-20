@@ -11,7 +11,7 @@ class User(MainModel, AbstractUser):
         'email address',
         unique=True,
         error_messages={
-            'unique': 'Correo ya se encuentra registrado'
+            'unique': 'Email is already regitered'
         }
     )
 
