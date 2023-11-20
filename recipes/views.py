@@ -1,10 +1,18 @@
+from django.shortcuts import get_object_or_404
+from django.db.models import F
 from rest_framework import viewsets, mixins, status
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
-from recipes.serializers import RecipeSerializer, RecipesRetrieveSerializer, IngredientSerializer, StepSerializer, ImageRecipeSerializer
-from recipes.models import Recipe, Step, Ingredient, ImageRecipe
+from recipes.serializers import (
+    RecipeSerializer,
+    RecipesRetrieveSerializer,
+    IngredientSerializer,
+    StepSerializer,
+    ImageRecipeSerializer,
+)
+from recipes.models import Recipe, Step, Ingredient, ImageRecipe, Bookmark, LikeRecipe
 from utils.permissions import IsUserOwner, IsUserRecipe
 
 class MixinsRecipe(
@@ -80,6 +88,32 @@ class RecipeViewset(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
     
+    @action(detail=True, methods=['POST'], permission_classes=[IsAuthenticated])
+    def like(self, request, pk=None):
+        recipe = self.get_object()
+        like = LikeRecipe.objects.filter(user=request.user, recipe=recipe).first()
+        if like:
+            recipe.likes = F('likes') - 1
+            like.delete()
+        else:
+            LikeRecipe.objects.create(user=self.request.user, recipe=recipe)
+            recipe.likes = F('likes') + 1
+        recipe.save()
+        return Response({'success': True}, status=status.HTTP_201_CREATED)
+    
+    @action(detail=True, methods=['POST'], permission_classes=[IsAuthenticated])
+    def bookmark(self, request, pk=None):
+        recipe = self.get_object()
+        bookmark = Bookmark.objects.filter(user=request.user, recipe=recipe).first()
+        if bookmark:
+            recipe.bookmarks = F('bookmarks') - 1
+            bookmark.delete()
+        else:
+            Bookmark.objects.create(user=request.user, recipe=recipe)
+            recipe.bookmarks = F('bookmarks') + 1
+        recipe.save()
+        return Response({'success': True}, status=status.HTTP_201_CREATED)
+        
 class StepViewset(MixinsRecipe):
     serializer_class = StepSerializer
     queryset = Step.objects.all()

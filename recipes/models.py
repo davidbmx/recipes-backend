@@ -63,3 +63,17 @@ class ImageRecipe(MainModel):
     def __str__(self):
         return self.image.name
     
+class LikeRecipe(MainModel):
+    recipe = models.ForeignKey('recipes.Recipe', on_delete=models.CASCADE, related_name='like_recipes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='like_recipes')
+
+    def __str__(self):
+        return self.recipe
+    
+class Bookmark(MainModel):
+    recipe = models.ForeignKey('recipes.Recipe', on_delete=models.CASCADE, related_name='bookmark_recipes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookmark_recipes')
+
+    def __str__(self):
+        return self.recipe
+    

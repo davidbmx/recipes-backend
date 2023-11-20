@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from recipes.models import Recipe, Ingredient, Step, ImageRecipe
+from recipes.models import Recipe, Ingredient, Step, ImageRecipe, LikeRecipe, Bookmark
 
 class StepSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,20 +14,49 @@ class IngredientSerializer(serializers.ModelSerializer):
         read_only_fields = ['recipe']
 
 class RecipeSerializer(serializers.ModelSerializer):
-    steps = StepSerializer(many=True, read_only=True)
-    ingredients = IngredientSerializer(many=True, read_only=True)
+    liked = serializers.SerializerMethodField('get_liked')
+    bookmarked = serializers.SerializerMethodField('get_bookmarked')
     class Meta:
         model = Recipe
         fields = '__all__'
         read_only_fields = ['user', 'likes', 'bookmarks',]
 
+    def get_liked(self, obj):
+        user = self.context['request'].user
+        if not user.is_authenticated:
+            return False
+        return obj.like_recipes.filter(user=user).first() != None
+    
+    def get_bookmarked(self, obj):
+        user = self.context['request'].user
+        if not user.is_authenticated:
+            return False
+        return obj.bookmark_recipes.filter(user=user).first() != None
+
 class RecipesRetrieveSerializer(serializers.ModelSerializer):
+    steps = StepSerializer(many=True, read_only=True)
+    ingredients = IngredientSerializer(many=True, read_only=True)
+    liked = serializers.SerializerMethodField('get_liked')
+    bookmarked = serializers.SerializerMethodField('get_bookmarked')
     class Meta:
         model = Recipe
         fields = [
             'user', 'title', 'description', 'dificulty', 'prep_time',
             'cook_time', 'bill_spent', 'tags', 'likes','bookmarks',
+            'steps', 'ingredients', 'liked', 'bookmarked',
         ]
+
+    def get_liked(self, obj):
+        user = self.context['request'].user
+        if not user.is_authenticated:
+            return False
+        return obj.like_recipes.filter(user=user).first() != None
+    
+    def get_bookmarked(self, obj):
+        user = self.context['request'].user
+        if not user.is_authenticated:
+            return False
+        return obj.bookmark_recipes.filter(user=user).first() != None
 
 class ImageRecipeSerializer(serializers.ModelSerializer):
     class Meta:
