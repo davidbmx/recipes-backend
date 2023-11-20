@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -18,7 +19,7 @@ class User(MainModel, AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name']
 
-    uid = models.TextField(db_index=True, blank=True, null=True)
+    uid = models.TextField(db_index=True, default=uuid.uuid4)
 
     following = models.IntegerField(default=0)
     avatar = models.ImageField(upload_to=upload_image, blank=True, null=True)
