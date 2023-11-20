@@ -26,7 +26,6 @@ class MixinsRecipe(
 
     def get_object(self):
         recipe = self.get_object_recipe()
-        print(recipe)
         queryset = self.get_queryset()
         obj = get_object_or_404(queryset, pk=self.kwargs['pk'], recipe__id = recipe.id)
         self.check_object_permissions(self.request, obj)
