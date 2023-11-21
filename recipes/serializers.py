@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from recipes.models import Recipe, Ingredient, Step, ImageRecipe, LikeRecipe, Bookmark
+from recipes.models import Recipe, Ingredient, Step, ImageRecipe
 
 class StepSerializer(serializers.ModelSerializer):
     class Meta:
