@@ -50,7 +50,7 @@ class RecipesRetrieveSerializer(serializers.ModelSerializer):
         fields = [
             'user', 'title', 'description', 'dificulty', 'prep_time',
             'cook_time', 'bill_spent', 'tags', 'likes','bookmarks',
-            'steps', 'ingredients', 'liked', 'bookmarked', 'image',
+            'steps', 'ingredients', 'liked', 'bookmarked', 'image', 
         ]
 
     def get_liked(self, obj):

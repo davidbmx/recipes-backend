@@ -6,6 +6,9 @@ from users.models import User
 def upload_image(instance, filename):
     return f'recipes/{instance.user.username}/{filename}'
 
+def upload_step(instance, filename):
+    return f'recipes/{instance.recipe.user.username}/{filename}'
+
 class Tag(MainModel):
     name = models.CharField(max_length=150)
     def __str___(self):
@@ -40,13 +43,13 @@ class Recipe(MainModel):
     
 
 class Step(MainModel):
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='instructions')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='steps')
     step = models.IntegerField()
     description = models.TextField()
-    image = models.URLField(blank=True, null=True)
+    image = models.ImageField(upload_to=upload_step, blank=True, null=True)
 
     def __str__(self):
-        return self.recipe
+        return self.recipe.title
 
 class Ingredient(MainModel):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='ingredients')
