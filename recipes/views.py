@@ -10,9 +10,9 @@ from recipes.serializers import (
     RecipesRetrieveSerializer,
     IngredientSerializer,
     StepSerializer,
-    ImageRecipeSerializer,
+    TagSerializer,
 )
-from recipes.models import Recipe, Step, Ingredient, ImageRecipe, Bookmark, LikeRecipe
+from recipes.models import Recipe, Step, Ingredient, Bookmark, LikeRecipe, Tag
 from utils.permissions import IsUserOwner, IsUserRecipe
 
 class MixinsRecipe(
@@ -124,9 +124,8 @@ class IngredientViewset(MixinsRecipe):
     queryset = Ingredient.objects.all()
     permission_classes = [IsAuthenticated, IsUserRecipe]
 
-class ImageRecipesViewset(MixinsRecipe):
-    serializer_class = ImageRecipeSerializer
-    queryset = ImageRecipe.objects.all()
-    permission_classes = [IsAuthenticated, IsUserRecipe]
+class TagsListView(mixins.ListModelMixin, viewsets.GenericViewSet):
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()
 
     

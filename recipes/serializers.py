@@ -1,6 +1,12 @@
 from rest_framework import serializers
 
-from recipes.models import Recipe, Ingredient, Step, ImageRecipe
+from recipes.models import Recipe, Ingredient, Step, Tag
+from users.serializers import UserPublicSerializer
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
 
 class StepSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,6 +22,7 @@ class IngredientSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     liked = serializers.SerializerMethodField('get_liked')
     bookmarked = serializers.SerializerMethodField('get_bookmarked')
+    user = UserPublicSerializer(many=False, read_only=True)
     class Meta:
         model = Recipe
         fields = '__all__'
@@ -43,7 +50,7 @@ class RecipesRetrieveSerializer(serializers.ModelSerializer):
         fields = [
             'user', 'title', 'description', 'dificulty', 'prep_time',
             'cook_time', 'bill_spent', 'tags', 'likes','bookmarks',
-            'steps', 'ingredients', 'liked', 'bookmarked',
+            'steps', 'ingredients', 'liked', 'bookmarked', 'image',
         ]
 
     def get_liked(self, obj):
@@ -58,7 +65,3 @@ class RecipesRetrieveSerializer(serializers.ModelSerializer):
             return False
         return obj.bookmark_recipes.filter(user=user).first() != None
 
-class ImageRecipeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ImageRecipe
-        fields = '__all__'

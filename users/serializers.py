@@ -3,6 +3,11 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from users.models import User
 
+class UserPublicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['uid', 'username', 'avatar']
+
 class CreateUser(serializers.ModelSerializer):
     class Meta:
         model = User

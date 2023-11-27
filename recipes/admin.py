@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from recipes.models import Recipe, Ingredient, Step, ImageRecipe
+from recipes.models import Recipe, Ingredient, Step, Tag
 
 # Register your models here.
 @admin.register(Recipe)
@@ -15,6 +15,6 @@ class StepAdmin(admin.ModelAdmin):
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ['recipe', 'quantity', 'description',]
 
-@admin.register(ImageRecipe)
-class ImageAdmin(admin.ModelAdmin):
-    pass
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name',]

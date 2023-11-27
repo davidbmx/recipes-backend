@@ -33,6 +33,7 @@ class Recipe(MainModel):
     likes = models.IntegerField(default=0)
     bookmarks = models.IntegerField(default=0)
     visibility = models.CharField(max_length=7, choices=VISIBILITY_CHOICE, default=VISIBILITY_CHOICE[0])
+    image = models.ImageField(upload_to=upload_image, blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -55,14 +56,6 @@ class Ingredient(MainModel):
     def __str__(self):
         return self.description
 
-class ImageRecipe(MainModel):
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to=upload_image)
-    is_default = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.image.name
-    
 class LikeRecipe(MainModel):
     recipe = models.ForeignKey('recipes.Recipe', on_delete=models.CASCADE, related_name='like_recipes')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='like_recipes')
